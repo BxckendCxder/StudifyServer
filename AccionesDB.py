@@ -7,37 +7,26 @@ def login(carnet, password):
     valores = (carnet, password)
     cursor.execute(sentencia, valores)
     result = cursor.fetchone()
-    print(type(result))
-    #print(len(result))
-
     if result is None:
-        print('No hay resultados')
         return False
     else:
-        print('Si hay resultados' + str(result))
         return True
 
-def buscarUserPorDUI(DUI):
+def registrarUsuario(DUI):
     conexion = ConectarDB()
     cursor = conexion.cursor()
     sentencia = "SELECT * FROM usuarios WHERE DUI = %s"
     valores = (DUI, )
     cursor.execute(sentencia, valores)
     result = cursor.fetchone()
-    print(type(result))
-    #print(len(result))
-
     if result is None:
-        print('Usuario no existe')
         return False
     else:
-        print('Usuario existente' + str(result))
         return True
 
 def crearNombreUsuario(nombre, dui):
     iniciales = ''.join([palabra[0] for palabra in nombre.strip().split()])
     ultimosNum = str(dui)[-5:]
-    print(iniciales + ultimosNum)
     return iniciales + ultimosNum
 
 def agregarUsuario(carnet, password, nombre, fechaDNacimiento, telefono, DUI):
@@ -50,6 +39,18 @@ def agregarUsuario(carnet, password, nombre, fechaDNacimiento, telefono, DUI):
     conexion.commit()
     conexion.close()
     return True
+
+def registroMaterias(nombreMat, nombreProf, horario):
+    conexion = ConectarDB()
+    cursor = conexion.cursor()
+    sentencia = "INSERT INTO studyfy.materias (nombre, profesor, Horario) VALUES (%s, %s, %s)"
+    valores = (nombreMat, nombreProf, horario)
+    cursor.execute(sentencia, valores)
+    cursor.close()
+    conexion.commit()
+    conexion.close()
+    return True
+
 
 
 
