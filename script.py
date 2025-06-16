@@ -38,7 +38,6 @@ def registrarUsuario():
 @app.route('/RegistrarMateria', methods=['POST'])
 def registroMaterias():
     datos = request.get_json()
-    print(datos)
     if(AccionesDB.login(datos['usuario'], datos['password'])):
         AccionesDB.registroMaterias(datos['NombreMat'], datos['NombreProf'], datos['Horario'])
         jsonRespuesta = {"EstadoComms": "Materia agregada correctamente"}
@@ -46,7 +45,13 @@ def registroMaterias():
         jsonRespuesta = {"EstadoComms": "Error"}
     return jsonify(jsonRespuesta)
 
-
+@app.route('/listarMaterias', methods=['POST'])
+def listarMaterias():
+    lista = AccionesDB.listarMaterias()
+    jsonRespuesta = {"EstadoComms": "OK",
+                    "Lista": lista}
+    print(lista)
+    return jsonify(jsonRespuesta)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

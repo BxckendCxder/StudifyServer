@@ -51,6 +51,16 @@ def registroMaterias(nombreMat, nombreProf, horario):
     conexion.close()
     return True
 
-
+def listarMaterias():
+    conexion = ConectarDB()
+    cursor = conexion.cursor()
+    sentencia = "SELECT * FROM studyfy.materias "
+    cursor.execute(sentencia)
+    result = cursor.fetchall()
+    #print(len(result))
+    lista = []
+    for x in result:
+        lista.append(x[1])
+    return lista
 
 
