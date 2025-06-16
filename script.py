@@ -15,17 +15,29 @@ def insertar():
     jsonRespuesta = {"EstadoComms":"Usuario Ingresado Correctamente"}
     return jsonify(jsonRespuesta)
 
-@app.route('/buscarUsuario', methods=['POST'])
-def buscarUsuario():
+@app.route('/login', methods=['POST'])
+def login():
     datos = request.get_json()
     print(datos)
-    if AccionesDB.buscarUsuarios(datos['usuario'], datos['password']):
+    if AccionesDB.login(datos['usuario'], datos['password']):
         jsonRespuesta = {"EstadoComms": "UsuarioExiste"}
     else:
         jsonRespuesta = {"EstadoComms": "UsuarioNoExiste"}
 
     return jsonify(jsonRespuesta)
 
+@app.route('/buscarUserPorDUI', methods=['POST'])
+def buscarUserPorId():
+    datos = request.get_json()
+    print(datos)
+    if AccionesDB.buscarUserPorDUI(datos['DUI']):
+        jsonRespuesta = {"EstadoComms": "UsuarioExiste"}
+    else:
+        usuarioGen = AccionesDB.crearNombreUsuario(datos['Nombre'], datos['DUI'])
+        jsonRespuesta = {"EstadoComms": "UsuarioNoExiste",
+                         "NombreUsuario": usuarioGen}
+        AccionesDB.agregarUsuario(usuarioGen, datos['Password'], datos['Nombre'], datos['FechaDNacimiento'], datos['telefono'], datos['DUI'])
+    return jsonify(jsonRespuesta)
 
 
 if __name__ == '__main__':
